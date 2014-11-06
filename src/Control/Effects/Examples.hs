@@ -16,6 +16,17 @@ program1res = program1run (17 :: Integer) program1
 
 -------------------
 
+--program1' :: (Member (Reader Int) r) => Eff r Int
+program1' = do
+  v1 <- ask
+  let _ = v1 :: Int
+  v2 <- local (+1) $ do
+    v <- ask
+    return (v :: Int)
+  return $ v1 + v2
+
+-------------------
+
 program2 = throw "something went wrong"
 
 program2run = runEff . handle exceptionHandler

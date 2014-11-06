@@ -1,4 +1,5 @@
 {-# LANGUAGE OverlappingInstances #-}
+{-# LANGUAGE TypeFamilies #-}
 
 module Control.Effects 
 ( Union
@@ -9,9 +10,11 @@ module Control.Effects
 , trivial
 , Eff
 , Handler
+, Rejiggle
 , effect
 , runEff
 , handle
+, rejiggle
 ) where
 
 import Control.Monad.Free
@@ -19,6 +22,7 @@ import Control.Applicative
 import Data.Maybe
 import Data.Typeable
 import Unsafe.Coerce
+import GHC.Exts (Constraint)
 
 ---- open ended uion ----
 data Union (r :: [* -> *]) (a :: *) where
@@ -48,6 +52,12 @@ decomp u@(Union d) = maybe (Right $ Union d) Left $ prj u
 trivial :: (Typeable f) => Union '[f] a -> f a
 trivial = fromJust . prj
 
+type family Rejiggle (r :: [* -> *]) (xs :: [* -> *]) :: Constraint 
+type instance Rejiggle r '[]       = ()
+type instance Rejiggle r (x ': xs) = (Member x r, Rejiggle r xs)
+
+rejiggle :: (Rejiggle r' r) => Eff r a -> Eff r' a
+rejiggle = unsafeCoerce
 
 ---- effect helpers ----
 type Eff r = Free (Union r)

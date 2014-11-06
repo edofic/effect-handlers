@@ -28,6 +28,7 @@ library
   default-extensions:  RankNTypes
                      , KindSignatures
                      , DataKinds
+                     , ConstraintKinds
                      , GADTs
                      , TypeOperators
                      , MultiParamTypeClasses
