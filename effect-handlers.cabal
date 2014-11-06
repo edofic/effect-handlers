@@ -38,6 +38,7 @@ library
                      , NoMonomorphismRestriction
                      , DeriveFunctor
                      , DeriveDataTypeable
+                     , GeneralizedNewtypeDeriving
 
 test-suite spec
   type:                exitcode-stdio-1.0

@@ -50,18 +50,19 @@ trivial = fromJust . prj
 
 
 ---- effect helpers ----
-type Eff r = Free (Union r)
+newtype Eff r a  = Eff { unEff :: Free (Union r) a } deriving (Functor, Applicative, Monad)
 type Handler e r a b = Either a (e (Eff r b)) -> Eff r b
 
 effect :: (Functor f, Member f r, Typeable f) => f (Eff r a) -> Eff r a
-effect = Free . inj
+effect = Eff . Free . inj . fmap unEff 
 
 runEff :: Eff '[] a -> a
-runEff (Pure a) = a
+runEff (Eff (Pure a)) = a
 
 handle :: (Functor e, Typeable e) => Handler e r a b -> Eff (e ': r) a -> Eff r b
-handle f (Pure a) = f (Left a)
-handle f (Free u) = either 
- (f . Right . fmap (handle f))
- (Free . fmap (handle f)) 
- (decomp u) 
+handle f (Eff (Pure a)) = f (Left a)
+handle f (Eff (Free u)) = either 
+    (f . Right . fmap (handle f))
+    (Eff . Free . (fmap unEff) . fmap (handle f)) 
+  (decomp $ fmap Eff u)
+
