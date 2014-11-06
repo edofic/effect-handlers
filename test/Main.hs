@@ -20,7 +20,7 @@ main = hspec $ do
 
     it "Returns a Right value if no exeption was thrown" $
       property $ \x -> Exc.prg2res x == (Right $ x + 1)
-      
+
   describe "Reader and Exception handler combined" $ do
     it "Handle both effects" $ do
       property $ \x ->  
@@ -28,4 +28,12 @@ main = hspec $ do
           if x < 15 
           then res == (Left $ show x)
           else res == (Right $ x + 1)
+
+  describe "Default value exception handler" $ do
+    it "Provides default value if exception is thrown" $ do
+      property $ \d x ->  
+        let res = Exc.prg4res d x in
+          if x < 10
+          then res == d
+          else res == x + 1
 
