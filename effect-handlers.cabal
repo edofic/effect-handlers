@@ -20,6 +20,7 @@ library
                      , Control.Effects.Reader
                      , Control.Effects.State
                      , Control.Effects.Exception
+                     , Control.Effects.IO
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8
                      , free >=4.9 && <4.10
