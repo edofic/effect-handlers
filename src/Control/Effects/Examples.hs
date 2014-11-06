@@ -37,3 +37,18 @@ program3run n = runEff
 
 program3res :: Integer -> Either String Integer
 program3res n = program3run n program3
+
+
+program4 = do
+  v <- ask
+  if v < 10
+  then throw "Not a valid number"
+  else return (v + 1)
+
+program4run :: Integer -> Integer -> Eff '[Reader Integer, Exception String] Integer -> Integer
+program4run d n = runEff
+                  . handle (defValueExeptionHandler d) 
+                  . handle (readerHandler n)
+
+program4res :: Integer -> Integer -> Integer
+program4res d n = program4run d n program4
