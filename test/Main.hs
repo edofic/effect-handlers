@@ -21,5 +21,11 @@ main = hspec $ do
     it "Returns a Right value if no exeption was thrown" $
       property $ \x -> Exc.prg2res x == (Right $ x + 1)
       
-
+  describe "Reader and Exception handler combined" $ do
+    it "Handle both effects" $ do
+      property $ \x ->  
+        let res = Exc.prg3res x in
+          if x < 15 
+          then res == (Left $ show x)
+          else res == (Right $ x + 1)
 
