@@ -46,7 +46,6 @@ test-suite spec
   hs-source-dirs:      test
 
   main-is:             Main.hs
-  other-modules:       Examples.Reader
 
   build-depends:       base >=4.7 && <4.8
                      , effect-handlers

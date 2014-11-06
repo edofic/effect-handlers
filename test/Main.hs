@@ -4,7 +4,6 @@ import Test.Hspec
 import Test.QuickCheck
 import Data.Either (isLeft)
 
-import Examples.Misc
 import qualified Examples.Reader as Rd
 import qualified Examples.Exception as Exc
 
