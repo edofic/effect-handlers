@@ -5,10 +5,12 @@ import Control.Effects.Reader
 import Control.Effects.Exception
 
 
-prgReader1 =  ask
+prg1 =  ask
 
-prgReader1run x = runEff . handle (readerHandler x)
+prg1run x = runEff . handle (readerHandler x)
 
-prgReader1res :: Int -> Int
-prgReader1res x = prgReader1run x prgReader1
+prg1res :: Int -> Int
+prg1res x = prg1run x prg1
+
+
 
