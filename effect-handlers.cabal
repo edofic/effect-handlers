@@ -17,9 +17,22 @@ cabal-version:       >=1.10
 
 library
   exposed-modules:     Control.Effects
-  -- other-modules:       
+                     , Control.Effects.Reader
+                     , Control.Effects.Exception
+  other-modules:       Control.Effects.Examples
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8
                      , free >=4.9 && <4.10
   hs-source-dirs:      src
   default-language:    Haskell2010
+  default-extensions:  RankNTypes
+                     , KindSignatures
+                     , DataKinds
+                     , GADTs
+                     , TypeOperators
+                     , MultiParamTypeClasses
+                     , FlexibleInstances
+                     , FlexibleContexts
+                     , NoMonomorphismRestriction
+                     , DeriveFunctor
+                     , DeriveDataTypeable
