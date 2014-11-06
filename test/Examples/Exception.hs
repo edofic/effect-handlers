@@ -2,6 +2,7 @@ module Examples.Exception where
 
 import Control.Effects
 import Control.Effects.Exception
+import Control.Effects.Reader
 
 handleException = runEff . handle exceptionHandler
 
