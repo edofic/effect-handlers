@@ -1,18 +1,18 @@
 module Control.Effects.Writer where
 
-import Control.Effects
+import Control.Effects hiding (return, (>>=))
 import Data.Monoid
 import Data.Typeable
 
 data Writer m a = Writer m (m -> a) deriving (Functor, Typeable)
 
-tell :: (Member (Writer m) r, Typeable m) => m -> Eff r ()
-tell m = effect $ Writer m $ const $ return ()
+tell :: (Member (Writer w) r, Typeable w, MonadEffect m) => w -> m r ()
+tell m = effect $ \k -> Writer m $ const $ k ()
 
-listen :: (Member (Writer m) r, Typeable m, Monoid m) => Eff r m
-listen = effect $ Writer mempty return
+listen :: (Member (Writer w) r, Typeable w, Monoid w, MonadEffect m) => m r w
+listen = effect $ \k -> Writer mempty k
 
-writerHandler :: (Monoid m) => Handler (Writer m) r a (a, m)
+writerHandler :: (Monoid w) => Handler (Writer w) r a (a, w)
 writerHandler (Left a) = 
   return (a, mempty)
 writerHandler (Right (Writer m k)) = do

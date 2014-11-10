@@ -1,17 +1,18 @@
 module Control.Effects.State where
 
+import Control.Effects.Class hiding (return, (>>=))
 import Control.Effects
 import Data.Typeable
 
 newtype State s a = State (s -> (a,s)) deriving (Functor, Typeable)
 
-get :: (Member (State a) r, Typeable a) => Eff r a
-get = effect $ State $ \s -> (return s, s)
+get :: (Member (State a) r, Typeable a, MonadEffect m) => m r a
+get = effect $ \k -> State $ \s -> (k s, s)
 
-put :: (Member (State s) r, Typeable s) => s -> Eff r ()
-put a = effect $ State $ \s -> (return (), a)
+put :: (Member (State s) r, Typeable s, MonadEffect m) => s -> m r ()
+put a = effect $ \k -> State $ \s -> (k (), a)
 
-state :: (Member (State s) r, Typeable s) => (s -> (a, s)) -> Eff r a
-state f = effect $ State $ \s -> 
+state :: (Member (State s) r, Typeable s, MonadEffect m) => (s -> (a, s)) -> m r a
+state f = effect $ \k -> State $ \s -> 
   let (a, s') = f s
-  in  (return a, s')
+  in  (k a, s')

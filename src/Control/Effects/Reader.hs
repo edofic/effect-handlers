@@ -1,15 +1,16 @@
 module Control.Effects.Reader where
 
-import Control.Effects
+import Control.Effects.Class hiding (return, (>>=))
+import Control.Effects.Union
 import Data.Typeable
 
 newtype Reader w a = Reader (w -> a) deriving (Functor, Typeable)
 
-ask :: (Member (Reader a) r, Typeable a) => Eff r a
-ask = effect $ Reader return
+ask :: (Member (Reader a) r, Typeable a, MonadEffect m) => m r a
+ask = effect $ \k -> Reader k
 
-reader :: (Member (Reader a) r, Typeable a) => (a -> b) -> Eff r b
-reader f = effect $ Reader $ return . f
+reader :: (Member (Reader a) r, Typeable a, MonadEffect m) => (a -> b) -> m r b
+reader f = effect $ \k -> Reader $ k . f
 
 readerHandler :: w -> Handler (Reader w) r a a
 readerHandler _ (Left a) = return a

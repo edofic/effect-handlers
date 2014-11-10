@@ -17,6 +17,10 @@ cabal-version:       >=1.10
 
 library
   exposed-modules:     Control.Effects
+                     , Control.Effects.Union
+                     , Control.Effects.Eff
+                     , Control.Effects.EffC2
+                     , Control.Effects.Class
                      , Control.Effects.Reader
                      , Control.Effects.Writer
                      , Control.Effects.State
@@ -56,3 +60,4 @@ test-suite spec
                      , HUnit
 
   default-extensions:  DataKinds
+                     , NoMonomorphismRestriction

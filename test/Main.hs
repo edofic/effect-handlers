@@ -6,13 +6,19 @@ import Data.Either (isLeft)
 
 import qualified Examples.Reader as Rd
 import qualified Examples.Exception as Exc
+import qualified Control.Effects.Eff as Eff
+import qualified Control.Effects.EffC2 as EffC2
 
 main :: IO ()
-main = hspec $ do
+main = hspec $ do 
+  suite Eff.runEff
+  suite EffC2.runEffC2
+
+suite run = do
   describe "A reader handler" $ do
     it "Returns the same value with simple ask" $ 
-      property $ \x -> Rd.prg1res x == x
-
+      property $ \x -> run (Rd.prg1res x) == x
+{-
   describe "An exception handler" $ do
     it "Retruns a Left value if an exception was thrown" $
       (isLeft Exc.prg1res) `shouldBe` True
@@ -35,4 +41,4 @@ main = hspec $ do
           if x < 10
           then res == d
           else res == x + 1
-
+-}

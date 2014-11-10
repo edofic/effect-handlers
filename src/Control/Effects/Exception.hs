@@ -1,12 +1,12 @@
 module Control.Effects.Exception where
 
-import Control.Effects
+import Control.Effects hiding (return, (>>=))
 import Data.Typeable
 
 newtype Exception m a = Exception m deriving (Functor, Typeable)
 
-throw :: (Member (Exception a) r, Typeable a) => a -> Eff r b
-throw = effect . Exception
+throw :: (Member (Exception a) r, Typeable a, MonadEffect m) => a -> m r b
+throw m = effect $ \k -> Exception m
 
 exceptionHandler :: Handler (Exception m) r a (Either m a)
 exceptionHandler (Left a) = return $ Right a
