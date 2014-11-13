@@ -1,8 +1,8 @@
 module Examples.Reader where
 
-import Control.Effects
-import Control.Effects.Reader
-import Control.Effects.Exception
+import Control.Effects.Free.Eff
+import Control.Effects.Free.Reader
+import Control.Effects.Free.Exception
 
 
 prg1 =  ask

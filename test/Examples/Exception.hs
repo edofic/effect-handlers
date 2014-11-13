@@ -1,8 +1,8 @@
 module Examples.Exception where
 
-import Control.Effects
-import Control.Effects.Exception
-import Control.Effects.Reader
+import Control.Effects.Free.Eff
+import Control.Effects.Free.Exception
+import Control.Effects.Free.Reader
 
 handleException = runEff . handle exceptionHandler
 

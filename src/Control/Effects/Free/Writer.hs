@@ -1,8 +1,7 @@
-module Control.Effects.Writer where
+module Control.Effects.Free.Writer where
 
-import Control.Effects
+import Control.Effects.Free.Eff
 import Data.Monoid
-import Data.Typeable
 
 data Writer m a = Writer m (m -> a) deriving (Functor, Typeable)
 

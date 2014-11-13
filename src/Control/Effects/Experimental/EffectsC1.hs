@@ -1,9 +1,9 @@
 module Control.Effects.Experimental.EffectsC1 where
 
 import Control.Applicative
-import Control.Effects (Union, Member, inj, prj, decomp, trivial)
 import Control.Monad.Cont 
 import Control.Monad.Free
+import Data.Union
 import Data.Typeable
 
 data Res r a = Val a | E (Union r (Res r a))

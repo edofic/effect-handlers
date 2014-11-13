@@ -1,7 +1,6 @@
-module Control.Effects.Reader where
+module Control.Effects.Free.Reader where
 
-import Control.Effects
-import Data.Typeable
+import Control.Effects.Free.Eff
 
 newtype Reader w a = Reader (w -> a) deriving (Functor, Typeable)
 

@@ -1,7 +1,6 @@
-module Control.Effects.State where
+module Control.Effects.Free.State where
 
-import Control.Effects
-import Data.Typeable
+import Control.Effects.Free.Eff
 
 newtype State s a = State (s -> (a,s)) deriving (Functor, Typeable)
 

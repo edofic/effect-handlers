@@ -1,6 +1,6 @@
-module Control.Effects.Exception where
+module Control.Effects.Free.Exception where
 
-import Control.Effects
+import Control.Effects.Free.Eff
 import Data.Typeable
 
 newtype Exception m a = Exception m deriving (Functor, Typeable)

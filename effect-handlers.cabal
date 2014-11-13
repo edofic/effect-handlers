@@ -16,12 +16,13 @@ extra-source-files:  README.md
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     Control.Effects
-                     , Control.Effects.Reader
-                     , Control.Effects.Writer
-                     , Control.Effects.State
-                     , Control.Effects.Exception
-                     , Control.Effects.IO
+  exposed-modules:     Data.Union
+                     , Control.Effects.Free.Eff
+                     , Control.Effects.Free.Reader
+                     , Control.Effects.Free.Writer
+                     , Control.Effects.Free.State
+                     , Control.Effects.Free.Exception
+                     , Control.Effects.Free.IO
                      , Control.Effects.Experimental.EffectsC1
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8

@@ -1,7 +1,6 @@
-module Control.Effects.IO where 
+module Control.Effects.Free.IO where 
 
-import Control.Effects
-import Data.Typeable
+import Control.Effects.Free.Eff
 
 data LiftIO a = forall r . LiftIO (IO r) (r -> a) deriving (Typeable)
 
