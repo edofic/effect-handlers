@@ -6,6 +6,7 @@ import Data.Either (isLeft)
 
 import qualified Examples.Reader as Rd
 import qualified Examples.Exception as Exc
+import qualified Examples.Writer as Wrt
 
 main :: IO ()
 main = hspec $ do
@@ -35,4 +36,8 @@ main = hspec $ do
           if x < 10
           then res == d
           else res == x + 1
-
+  
+  describe "Writer handler"$ do
+    it "join the monoidal value of tell and return the result and log" $ do
+      Wrt.prg1res  `shouldBe` ((), ["hello", "world"])
+        
