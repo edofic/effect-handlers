@@ -1,8 +1,10 @@
 module Control.Effects.Cont.Eff 
 ( Eff
 , Handler
+, Res
 , effect
-, runEff
+, runPure
+, runPureRes
 , handle
 , inj
 , Member
@@ -50,8 +52,10 @@ effect :: (forall b . (a -> Res r b) -> Union r (Res r b)) -> Eff r a
 effect e = Eff $ \k -> E $ e k
 
 runPure :: Eff '[] a -> a
-runPure e = a where
-  Val a = runEff e Val
+runPure = runPureRes . finish
+
+runPureRes :: Res '[] a -> a
+runPureRes (Val a) = a
 
 finish :: Eff r a -> Res r a
 finish c = runEff c Val

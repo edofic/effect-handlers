@@ -1,8 +1,10 @@
 module Control.Effects.Codt.Eff
 ( Eff
 , Handler
+, Res
 , effect
-, runEff
+, runPure
+, runPureRes
 , handle
 , inj
 , Member
@@ -26,8 +28,10 @@ effect :: (forall b . (a -> Res r b) -> Union r (Res r b)) -> Eff r a
 effect e = Eff $ Codensity $ \k -> Free $ e k
 
 runPure :: Eff '[] a -> a
-runPure e = a where
-  Pure a = finish e
+runPure = runPureRes . finish
+
+runPureRes :: Res '[] a -> a
+runPureRes (Pure a) = a
 
 finish :: Eff r a -> Res r a
 finish = lowerCodensity . runEff
