@@ -6,6 +6,8 @@ module Control.Effects.Codt.Eff
 , runPure
 , runPureRes
 , handle
+, continue
+, finish
 , inj
 , Member
 , Typeable

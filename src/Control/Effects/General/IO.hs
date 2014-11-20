@@ -12,5 +12,3 @@ ioHandler (Left a) =
   return $ return a
 ioHandler (Right (LiftIO c k)) = 
   return $ c >>= (runPureRes . k)
-
-magik = 1

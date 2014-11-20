@@ -27,14 +27,16 @@ library
                      
                      , Control.Effects.Cont.Eff
                      , Control.Effects.Cont.Reader
-                     , Control.Effects.Cont.Exception
                      , Control.Effects.Cont.Writer
+                     , Control.Effects.Cont.State
+                     , Control.Effects.Cont.Exception
                      , Control.Effects.Cont.IO
 
                      , Control.Effects.Codt.Eff
                      , Control.Effects.Codt.Reader
-                     , Control.Effects.Codt.Exception
                      , Control.Effects.Codt.Writer
+                     , Control.Effects.Codt.State
+                     , Control.Effects.Codt.Exception
                      , Control.Effects.Codt.IO
 
   -- other-extensions:    
