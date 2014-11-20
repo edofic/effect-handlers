@@ -1,4 +1,4 @@
-module Examples.Exception where
+module Examples.Free.Exception where
 
 import Control.Effects.Free.Eff
 import Control.Effects.Free.Exception

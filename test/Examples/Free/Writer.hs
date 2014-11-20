@@ -1,4 +1,4 @@
-module Examples.Writer where
+module Examples.Free.Writer where
 
 import Control.Effects.Free.Eff
 import Control.Effects.Free.Writer

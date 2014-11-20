@@ -1,4 +1,4 @@
-module Examples.Reader where
+module Examples.Free.Reader where
 
 import Control.Effects.Free.Eff
 import Control.Effects.Free.Reader

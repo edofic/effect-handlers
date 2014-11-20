@@ -58,5 +58,6 @@ test-suite spec
                      , hspec >= 1.12 && <1.13
                      , QuickCheck
                      , HUnit
+                     , hspec-discover
 
   default-extensions:  DataKinds
