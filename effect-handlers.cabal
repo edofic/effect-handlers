@@ -26,6 +26,7 @@ library
                      , Control.Effects.Cont.Eff
                      , Control.Effects.Cont.Reader
                      , Control.Effects.Cont.Exception
+                     , Control.Effects.Cont.Writer
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8
                      , free >=4.9 && <4.10
