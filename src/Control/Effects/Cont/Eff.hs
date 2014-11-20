@@ -1,4 +1,13 @@
-module Control.Effects.Experimental.EffectsC1 where
+module Control.Effects.Cont.Eff 
+( Eff
+, Handler
+, effect
+, runEff
+, handle
+, inj
+, Member
+, Typeable
+) where
 
 import Control.Applicative
 import Control.Monad.Cont 
@@ -37,8 +46,8 @@ instance Monad (Eff r) where
 
 type Handler e r a b = Either a (e (Res r b)) -> Res r b
 
-liftEffect :: (forall b . (a -> Res r b) -> Union r (Res r b)) -> Eff r a
-liftEffect e = Eff $ \k -> E $ e k
+effect :: (forall b . (a -> Res r b) -> Union r (Res r b)) -> Eff r a
+effect e = Eff $ \k -> E $ e k
 
 runPure :: Eff '[] a -> a
 runPure e = a where
@@ -59,42 +68,3 @@ handleRes h (E u) = case decomp u of
 
 handle :: (Functor e, Typeable e) => Handler e r a b -> Eff (e ': r) a -> Eff r b
 handle h c = continue $ handleRes h $ finish c
-
-
----------------------------------------------
-
-newtype Reader w a = Reader (w -> a) deriving (Functor, Typeable)
-
-ask :: (Member (Reader a) r, Typeable a) => Eff r a
-ask = liftEffect $ \k -> inj $ Reader k
-
-reader :: (Member (Reader a) r, Typeable a) => (a -> b) -> Eff r b
-reader f = liftEffect $ \k -> inj $ Reader $ k . f
-
-readerHandler :: w -> Handler (Reader w) r a a
-readerHandler _ (Left a) = return a
-readerHandler n (Right (Reader k)) = k n
-
-newtype Exception m a = Exception m deriving (Functor, Typeable)
-
-throw :: (Member (Exception a) r, Typeable a) => a -> Eff r b
-throw m = liftEffect $ \k -> inj $ Exception m
-
-exceptionHandler :: Handler (Exception m) r a (Either m a)
-exceptionHandler (Left a) = return $ Right a
-exceptionHandler (Right (Exception m)) = return $ Left m
-
-program3 = do
-  v <- ask
-  if v < 15 
-  then throw $ show v
-  else return (v+1)
-
-program3run n  = runPure
-                  . handle exceptionHandler 
-                  . handle (readerHandler n)
-
-program3res :: Integer -> Either String Integer
-program3res n = program3run n program3
-
-

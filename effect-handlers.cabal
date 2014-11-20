@@ -23,7 +23,9 @@ library
                      , Control.Effects.Free.State
                      , Control.Effects.Free.Exception
                      , Control.Effects.Free.IO
-                     , Control.Effects.Experimental.EffectsC1
+                     , Control.Effects.Cont.Eff
+                     , Control.Effects.Cont.Reader
+                     , Control.Effects.Cont.Exception
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8
                      , free >=4.9 && <4.10
