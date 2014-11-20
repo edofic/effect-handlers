@@ -23,5 +23,5 @@ state f = do
 stateHandler :: Handler (State s) r a (s -> Eff r a) 
 stateHandler (Left a) = return $ const $ return a
 stateHandler (Right (SGet k)) = return $ \s -> join $ fmap ($s) (k s)
-stateHandler (Right (SPut s k)) = k
+stateHandler (Right (SPut s k)) = return $ \_ -> join $ fmap ($s) k 
   
