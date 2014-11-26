@@ -4,7 +4,7 @@ import Control.Effects.Free.Eff
 import Control.Effects.Free.Exception
 import Control.Effects.Free.Reader
 
-handleException = runEff . handle exceptionHandler
+handleException = runPure . handle exceptionHandler
 
 -------------------------------------------------------
 
@@ -28,7 +28,7 @@ prg3 = do
   then throw $ show v
   else return (v+1)
 
-prg3run n = runEff 
+prg3run n = runPure 
                  . handle exceptionHandler 
                  . handle (readerHandler n)
 
@@ -43,9 +43,10 @@ prg4 = do
   then throw "Not a valid number"
   else return (v + 1)
 
+
 prg4run :: Integer -> Integer -> Eff '[Reader Integer, Exception String] Integer -> Integer
-prg4run d n = runEff
-                  . handle (defValueExeptionHandler d) 
+prg4run d n = runPure
+                  . handle (defValueExceptionHandler d) 
                   . handle (readerHandler n)
 
 prg4res :: Integer -> Integer -> Integer
