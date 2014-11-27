@@ -24,6 +24,7 @@ library
                      , Control.Effects.Free.State
                      , Control.Effects.Free.Exception
                      , Control.Effects.Free.IO
+                     , Control.Effects.Free.Search 
                      
                      , Control.Effects.Cont.Eff
                      , Control.Effects.Cont.Reader
@@ -31,6 +32,7 @@ library
                      , Control.Effects.Cont.State
                      , Control.Effects.Cont.Exception
                      , Control.Effects.Cont.IO
+                     , Control.Effects.Cont.Search 
 
                      , Control.Effects.Codt.Eff
                      , Control.Effects.Codt.Reader
@@ -38,6 +40,7 @@ library
                      , Control.Effects.Codt.State
                      , Control.Effects.Codt.Exception
                      , Control.Effects.Codt.IO
+                     , Control.Effects.Codt.Search 
 
   -- other-extensions:    
   build-depends:       base           >=4.7 && <4.8
