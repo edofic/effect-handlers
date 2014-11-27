@@ -73,4 +73,8 @@ test-suite spec
                      , HUnit
                      , hspec-discover
 
+  other-modules:      Main
+                    , Spec
+                
+
   default-extensions:  DataKinds
