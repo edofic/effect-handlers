@@ -8,3 +8,5 @@ prg1 = do
   return (x,y)
 
 prg1res = runPure $ handle (handleDFS :: Handler (Search Int) r a [a]) $ prg1 
+
+prg1res2 = runPure $ handle (handleBacktrackMaybe :: Handler (Search Int) r a (Maybe a)) $ prg1 

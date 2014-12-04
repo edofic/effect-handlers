@@ -39,3 +39,7 @@ spec = do
   describe "DFS handler" $ do
     it "works like [] for choose and fail on finite lists" $ do
       Srch.prg1res `shouldBe` [(1,3), (1,4)]
+  describe
+   "Backtracking handler" $ 
+    it "works like dfs for choose and fail" $ do
+      Srch.prg1res2 `shouldBe` Just (1,3)
