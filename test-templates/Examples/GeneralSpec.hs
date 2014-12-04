@@ -36,3 +36,6 @@ spec = do
     it "join the monoidal value of tell and return the result and log" $ do
       Wrt.prg1res  `shouldBe` ((), ["hello", "world"])
  
+  describe "DFS handler" $ do
+    it "works like [] for choose and fail on finite lists" $ do
+      Srch.prg1res `shouldBe` [(1,3), (1,4)]

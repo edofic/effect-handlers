@@ -4,5 +4,4 @@ module Examples.CodtSpec where
 import qualified Examples.Codt.Reader as Rd
 import qualified Examples.Codt.Exception as Exc
 import qualified Examples.Codt.Writer as Wrt
-
-
+import qualified Examples.Codt.Search as Srch
