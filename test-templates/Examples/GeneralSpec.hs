@@ -1,7 +1,7 @@
 
 import Test.Hspec
 import Test.QuickCheck
-import Data.Either (isLeft)
+import Data.Either (isLeft, isRight)
 
 spec :: Spec
 spec = do
@@ -43,3 +43,8 @@ spec = do
    "Backtracking handler" $ 
     it "works like dfs for choose and fail" $ do
       Srch.prg1res2 `shouldBe` Just (1,3)
+
+  describe "Combined handler" $
+    it "runs" $
+      (isRight $ Cmb.testPrgRes 10) `shouldBe` True
+      
