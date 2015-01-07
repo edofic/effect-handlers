@@ -48,3 +48,6 @@ run n = runPure
 res :: Integer -> Either String Integer
 res n = run n program
 ```
+
+## Documentation
+Haddock docs are [available online](http://edofic.github.io/effect-handlers)
