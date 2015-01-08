@@ -16,8 +16,16 @@ testPrgRun n = runPure
                  . handle (handleDFS :: Handler (Search Int) r a [a])
                  . handle (readerHandler n)
 
+testPrgRun2 n = runPure 
+                 . handle (handleDFS :: Handler (Search Int) r a [a])
+                 . handle exceptionHandler 
+                 . handle (readerHandler n)
+
  
 testPrgRes :: Int -> Either String [Float]
 testPrgRes n = testPrgRun n testPrg
+
+testPrgRes2 :: Int -> [Either String Float]
+testPrgRes2 n = testPrgRun2 n testPrg
 
 
