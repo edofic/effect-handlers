@@ -4,6 +4,7 @@
 module Control.Effects.Free.Eff
 ( Eff
 , Handler
+, Comp (Value, Comp)
 , effect
 , runPure
 , runPureRes
@@ -29,6 +30,10 @@ type Res r = Free (Union r)
 -- for the result type.
 newtype Eff r a  = Eff { unEff :: Res r a } deriving (Functor, Applicative, Monad)
 
+-- |Comp represents a computation. It is either a pure value or a computation 
+-- that needs further evaluation and effect handling. 
+data Comp e r a b = Value a | Comp (e (Res r b))
+
 -- |Handler is a function that takes a result or an effect and a continuation
 -- |and handles it. 
 -- 
@@ -40,7 +45,7 @@ newtype Eff r a  = Eff { unEff :: Res r a } deriving (Functor, Applicative, Mona
 -- `a` is the result type of the program you will handle
 --
 -- `b` is the result of handled computation.
-type Handler e r a b = Either a (e (Res r b)) -> Res r b
+type Handler e r a b = Comp e r a b -> Res r b
 
 -- | `effect` is meant to be used as a helper function for defining new effects.
 -- See predefined effects for examples. Good way to use it is to pass in a lambda
@@ -73,7 +78,7 @@ continue = Eff
 -- solution seems to be to manually specify type of the handler such that it is monomorphic
 -- in `e`. Sorry.
 handle :: (Functor e, Typeable e) => Handler e r a b -> Eff (e ': r) a -> Eff r b
-handle f (Eff (Pure a)) = Eff $ f $ Left a
+handle f (Eff (Pure a)) = Eff $ f $ Value a
 handle f (Eff (Free u)) = case decomp (Eff `fmap` u) of 
-  Left a -> Eff $ f $ Right $ (unEff . handle f) `fmap` a 
+  Left a -> Eff $ f $ Comp $ (unEff . handle f) `fmap` a 
   Right a -> Eff $ Free $ (unEff . handle f) `fmap` a

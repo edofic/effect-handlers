@@ -28,6 +28,6 @@ state f = do
 -- |Handle state into a function. Note that applying the resulting 
 -- function you get out another program that you have to bind over.
 stateHandler :: Handler (State s) r a (s -> Eff r a) 
-stateHandler (Left a) = return $ const $ return a
-stateHandler (Right (SGet k)) = return $ \s -> join $ ($s) `fmap` continue (k s)
-stateHandler (Right (SPut s k)) = return $ \_ -> join $ continue $ fmap ($s) k 
+stateHandler (Value a) = return $ const $ return a
+stateHandler (Comp (SGet k)) = return $ \s -> join $ ($s) `fmap` continue (k s)
+stateHandler (Comp (SPut s k)) = return $ \_ -> join $ continue $ fmap ($s) k 

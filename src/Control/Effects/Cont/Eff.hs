@@ -4,6 +4,7 @@
 module Control.Effects.Cont.Eff 
 ( Eff
 , Handler
+, Comp (Value, Comp)
 , Res
 , effect
 , runPure
@@ -53,6 +54,10 @@ instance Monad (Eff r) where
             runEff m $ \a ->
             runEff (f a ) k
 
+-- |Comp represents a computation. It is either a pure value or a computation 
+-- that needs further evaluation and effect handling. 
+data Comp e r a b = Value a | Comp (e (Res r b))
+
 -- |Handler is a function that takes a result or an effect and a continuation
 -- |and handles it. 
 -- 
@@ -64,7 +69,7 @@ instance Monad (Eff r) where
 -- `a` is the result type of the program you will handle
 --
 -- `b` is the result of handled computation.
-type Handler e r a b = Either a (e (Res r b)) -> Res r b
+type Handler e r a b = Comp e r a b -> Res r b
 
 -- | `effect` is meant to be used as a helper function for defining new effects.
 -- See predefined effects for examples. Good way to use it is to pass in a lambda
@@ -96,9 +101,9 @@ continue r = Eff (r >>=)
 
 
 handleRes :: (Functor e, Typeable e) => Handler e r a b -> Res (e ': r) a -> Res r b
-handleRes h (Val a) = h $ Left a
+handleRes h (Val a) = h $ Value a
 handleRes h (E u) = case decomp u of 
-  Left  u -> h $ Right $ fmap (handleRes h) u
+  Left  u -> h $ Comp $ fmap (handleRes h) u
   Right u -> E $ fmap (handleRes h) u
 
 -- |Use a `Handler` on an `Eff` program to stripe away the first layer of effects.

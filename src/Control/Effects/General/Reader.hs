@@ -15,5 +15,5 @@ reader f = effect $ \k -> inj $ Reader $ k . f
 
 -- |The obvious handler that just embeds the value provided.
 readerHandler :: w -> Handler (Reader w) r a a
-readerHandler _ (Left a) = return a
-readerHandler n (Right (Reader k)) = k n
+readerHandler _ (Value a) = return a
+readerHandler n (Comp (Reader k)) = k n

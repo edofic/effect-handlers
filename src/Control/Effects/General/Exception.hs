@@ -14,11 +14,11 @@ throw m = effect $ \k -> inj $ Exception m
 -- |This handler converts an program that might throw an exception
 -- into a program that returns either its result or the exception.
 exceptionHandler :: Handler (Exception m) r a (Either m a)
-exceptionHandler (Left a) = return $ Right a
-exceptionHandler (Right (Exception m)) = return $ Left m
+exceptionHandler (Value a) = return $ Right a
+exceptionHandler (Comp (Exception m)) = return $ Left m
 
 -- |This function generates a handler that upon a `throw` short-circuts
 -- the computation and returns the default value instead.
 defValueExceptionHandler :: a -> Handler (Exception m) r a a
-defValueExceptionHandler _ (Left a) = return a
-defValueExceptionHandler d (Right (Exception m)) = return d
+defValueExceptionHandler _ (Value a) = return a
+defValueExceptionHandler d (Comp (Exception m)) = return d

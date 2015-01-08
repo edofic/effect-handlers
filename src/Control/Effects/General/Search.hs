@@ -27,14 +27,14 @@ searchFail t = do
 
 -- |Use a strict depth first search. Equal to using `ListT`
 handleDFS :: Handler (Search w) r a [a] 
-handleDFS (Left a) = return [a]
-handleDFS (Right (SChoose ws k)) = f $ map k ws where
+handleDFS (Value a) = return [a]
+handleDFS (Comp (SChoose ws k)) = f $ map k ws where
   f = foldr (liftM2 (++)) $ return []
 
 -- |Lazy depth first search with backtracking.
 handleBacktrackMaybe :: Handler (Search w) r a (Maybe a)
-handleBacktrackMaybe (Left a) = return $ Just a
-handleBacktrackMaybe (Right (SChoose ws k)) = step ws where
+handleBacktrackMaybe (Value a) = return $ Just a
+handleBacktrackMaybe (Comp (SChoose ws k)) = step ws where
   step [] = return Nothing
   step (w:ws') = 
     k w >>= \r -> case r of 

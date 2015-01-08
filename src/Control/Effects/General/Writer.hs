@@ -13,7 +13,7 @@ tell m = effect $ \k -> inj $ Writer m $ k ()
 
 -- |Handles writes by `mappend`ing them together.
 writerHandler :: (Monoid m) => Handler (Writer m) r a (a, m)
-writerHandler (Left a) = return (a, mempty)
-writerHandler (Right (Writer m k)) = do
+writerHandler (Value a) = return (a, mempty)
+writerHandler (Comp (Writer m k)) = do
   (a, m') <- k
   return (a, m <> m')

@@ -18,7 +18,7 @@ liftIO c = effect $ \k -> inj $ LiftIO c k
 -- the effect stack is otherwise empty - this handler would not
 -- typecheck otherwise.
 ioHandler :: Handler LiftIO '[] a (IO a)
-ioHandler (Left a) = 
+ioHandler (Value a) = 
   return $ return a
-ioHandler (Right (LiftIO c k)) = 
+ioHandler (Comp (LiftIO c k)) = 
   return $ c >>= (runPureRes . k)
