@@ -8,14 +8,10 @@ See these papers for the ideas and theory behind the library:
   - [A. Bauer, M. Pretnar: Programming with Algebraic Effects and Handlers](http://arxiv.org/abs/1203.1539)
   - [O Kiselyov, A Sabry, C Swords: Extensible Effects](http://dl.acm.org/citation.cfm?id=2503791)
 
-Implementation wise it's most close to [extensible-effects](http://hackage.haskell.org/package/extensible-effects) (also see the Extensible Effects paper) but it implements deep handlers instead of shallow and provides several "backends".
+Implementation wise it's most close to [extensible-effects](http://hackage.haskell.org/package/extensible-effects) (also see the Extensible Effects paper) but it implements deep handlers instead of shallow.
 
 ## What does this library provide?
-There are 3 groups of modules that are source-compatible, you can import any one of them and your code will work. But you will have to stick to that implementation, since they are not type-compatible.
-
-Different implementations exists for experimentation purposes. We do not have sufficient data to say for sure but it seems that `Control.Effects.Cont` is the fastest.
-
-Each of the groups provides the effect monad `Eff` and modules
+There is the `Eff` monad type and modules for pre-implemented effects.
 
   - `Exception`
   - `IO`
@@ -24,7 +20,7 @@ Each of the groups provides the effect monad `Eff` and modules
   - `State`
   - `Writer`
 
-that provide corresponding effects.
+It is easy to define your own effects and combine them.
 
 
 ## Example
