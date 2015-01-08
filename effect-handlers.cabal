@@ -29,10 +29,10 @@ description:
     import Control.Effects.Cont.Exception
     .
     program = do
-      v <- ask
-      if v < 15 
-      then throw $ show v
-      else return (v+1)
+    &#32;&#32;v <- ask
+    &#32;&#32;if v < 15 
+    &#32;&#32;then throw $ show v
+    &#32;&#32;else return (v+1)
     .
     run n = runPure . handle exceptionHandler . handle (readerHandler n)
     .
