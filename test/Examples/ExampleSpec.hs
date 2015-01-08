@@ -1,3 +1,10 @@
+module Examples.ExampleSpec where
+
+import qualified Examples.Reader as Rd
+import qualified Examples.Exception as Exc
+import qualified Examples.Writer as Wrt
+import qualified Examples.Search as Srch
+import qualified Examples.Combined as Cmb
 
 import Test.Hspec
 import Test.QuickCheck

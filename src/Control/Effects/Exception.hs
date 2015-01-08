@@ -1,6 +1,8 @@
--- $desc
 -- This module provides a simple exception throwind effect
 -- with a single operation `throw` and two ready-made handlers
+module Control.Effects.Exception where
+
+import Control.Effects.Eff
 
 -- |The functor representing the exception. You shouldn't need
 -- to create this manually, just use `throw`.

@@ -1,7 +1,9 @@
+-- This module provides the familiar state effect.
+module Control.Effects.State where
+
+import Control.Effects.Eff
 import Control.Monad
 
--- $desc
--- This module provides the familiar state effect.
 
 -- |The functor representing the effect. You shouldn't need
 -- to create this manually, just use `get`, `put` or `state`.

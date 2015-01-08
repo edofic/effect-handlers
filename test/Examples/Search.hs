@@ -1,3 +1,8 @@
+module Examples.Search where
+
+import Control.Effects.Eff
+import Control.Effects.Search
+
 import Control.Monad
 
 prg1 :: Member (Search Int) r => Eff r (Int, Int)

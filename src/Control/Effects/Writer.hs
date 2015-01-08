@@ -1,7 +1,9 @@
+-- This module provides the familiar writer effect.
+module Control.Effects.Writer where
+
+import Control.Effects.Eff
 import Data.Monoid
 
--- $desc
--- This module provides the familiar writer effect.
 
 -- |The functor representing the effect. You shouldn't need
 -- to create this manually, just use `tell`

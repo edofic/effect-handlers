@@ -1,3 +1,9 @@
+module Examples.Exception where
+
+import Control.Effects.Eff
+import Control.Effects.Exception
+import Control.Effects.Reader
+
 
 handleException = runPure . handle exceptionHandler
 

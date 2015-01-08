@@ -1,7 +1,10 @@
--- $desc
 -- This module provides a mechanism to embed `IO` computations
 -- into the effect monad. Note that the `IO` can only ever be at 
 -- the base of your stack (for the same reasons as with transformers).
+module Control.Effects.IO where
+
+import Control.Effects.Eff
+
 
 -- |The functor representing the effect. You shouldn't need
 -- to create this manually, just use `liftIO`.

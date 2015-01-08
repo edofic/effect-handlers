@@ -1,7 +1,7 @@
--- |This implementation of the efffect monad uses hand rolled Free
--- with hand rolled "inlined" codensity transformation (CPS-ish).
--- It is supposed to be the fastest since it has no extra abstractions.
-module Control.Effects.Cont.Eff 
+-- |This implementation of the effect monad uses `Free` over a 
+-- `Union` of functors and then applies `Codensity` over it
+-- for asymptotic improvements of ill-associated binds.
+module Control.Effects.Eff
 ( Eff
 , Handler
 , Comp (Value, Comp)
@@ -10,49 +10,25 @@ module Control.Effects.Cont.Eff
 , runPure
 , runPureRes
 , handle
-, finish
 , continue
+, finish
 , inj
 , Member
 , Typeable
 ) where
 
 import Control.Applicative
-import Control.Monad.Cont 
+import Control.Monad.Codensity
 import Control.Monad.Free
 import Data.Union
 import Data.Typeable
 
--- |Result structure of the program is isomorphic to 
--- `Free (Union r) a`
-data Res r a = Val a | E (Union r (Res r a))
-             deriving Functor 
+-- |Result structure of the program is directly `Free` over `Union` 
+-- indexed by the list of effect functors.
+type Res r = Free (Union r)
 
-instance Applicative (Res r) where
-  pure = Val
-  mf <*> ma = mf >>= flip fmap ma
-
-instance Monad (Res r) where
-  return = Val
-  (Val a) >>= f = f a
-  (E u) >>= f = E $ fmap (>>= f) u
-
-newtype Eff r a = Eff { runEff :: forall b . (a -> Res r b) -> Res r b}
-
-instance Functor (Eff r) where
-  fmap f eff = Eff $ \k -> runEff eff (k . f)
-
-instance Applicative (Eff r) where
-  pure a = Eff ($a)
-  mf <*> mx = Eff $ \k -> 
-              runEff mf $ \f ->
-              runEff mx $ k . f
-
-instance Monad (Eff r) where
-  return a = Eff ($a)
-  m >>= f = Eff $ \k -> 
-            runEff m $ \a ->
-            runEff (f a ) k
+newtype Eff r a = Eff { runEff :: Codensity (Res r) a }
+                  deriving (Functor, Applicative, Monad)
 
 -- |Comp represents a computation. It is either a pure value or a computation 
 -- that needs further evaluation and effect handling. 
@@ -76,7 +52,7 @@ type Handler e r a b = Comp e r a b -> Res r b
 -- expression with explicit `k` for continuation. You will need to manually `inj` 
 -- into the `Union` because of some GHC limitations.
 effect :: (forall b . (a -> Res r b) -> Union r (Res r b)) -> Eff r a
-effect e = Eff $ \k -> E $ e k
+effect e = Eff $ Codensity $ \k -> Free $ e k
 
 -- |A program without effects is guaranteed to be pure so you 
 -- can safely convert it into a value.
@@ -86,25 +62,24 @@ runPure = runPureRes . finish
 -- |Like `runPure` but for program results. You only need this for implementing
 -- some handlers. 
 runPureRes :: Res '[] a -> a
-runPureRes (Val a) = a
+runPureRes (Pure a) = a
 
 -- |Finish a program and convert it into a result structure.
 finish :: Eff r a -> Res r a
-finish c = runEff c Val
+finish = lowerCodensity . runEff
 
 -- |Convert a result back into a program in order to compose it.
 -- This function might not be needed and might introduce some 
 -- performance issues (it is used in `handle`) but we didn't find 
 -- a way to drop it.
 continue :: Res r a -> Eff r a
-continue r = Eff (r >>=)
-
+continue r = Eff $ Codensity (r >>=)
 
 handleRes :: (Functor e, Typeable e) => Handler e r a b -> Res (e ': r) a -> Res r b
-handleRes h (Val a) = h $ Value a
-handleRes h (E u) = case decomp u of 
+handleRes h (Pure a) = h $ Value a
+handleRes h (Free u) = case decomp u of 
   Left  u -> h $ Comp $ fmap (handleRes h) u
-  Right u -> E $ fmap (handleRes h) u
+  Right u -> Free $ fmap (handleRes h) u
 
 -- |Use a `Handler` on an `Eff` program to stripe away the first layer of effects.
 -- There are some issues if you are using a handler that is somewhat polymorphic in `e`

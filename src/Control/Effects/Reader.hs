@@ -1,5 +1,7 @@
--- $desc
 -- This module provides the familiar reader effect.
+module Control.Effects.Reader where
+
+import Control.Effects.Eff
 
 -- |The functor representing the effect. You shouldn't need
 -- to create this manually, just use `ask` or `reader`

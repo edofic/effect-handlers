@@ -1,7 +1,9 @@
+-- This module provides the familiar reader effect.
+module Control.Effects.Search where
+
+import Control.Effects.Eff
 import Control.Monad
 
--- $desc
--- This module provides the familiar reader effect.
 
 -- |A proxy for passing type to functions. Example
 -- > foo

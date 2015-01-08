@@ -18,29 +18,13 @@ cabal-version:       >=1.10
 library
   exposed-modules:     Data.Union
                      
-                     , Control.Effects.Free.Eff
-                     , Control.Effects.Free.Reader
-                     , Control.Effects.Free.Writer
-                     , Control.Effects.Free.State
-                     , Control.Effects.Free.Exception
-                     , Control.Effects.Free.IO
-                     , Control.Effects.Free.Search 
-                     
-                     , Control.Effects.Cont.Eff
-                     , Control.Effects.Cont.Reader
-                     , Control.Effects.Cont.Writer
-                     , Control.Effects.Cont.State
-                     , Control.Effects.Cont.Exception
-                     , Control.Effects.Cont.IO
-                     , Control.Effects.Cont.Search 
-
-                     , Control.Effects.Codt.Eff
-                     , Control.Effects.Codt.Reader
-                     , Control.Effects.Codt.Writer
-                     , Control.Effects.Codt.State
-                     , Control.Effects.Codt.Exception
-                     , Control.Effects.Codt.IO
-                     , Control.Effects.Codt.Search 
+                     , Control.Effects.Eff
+                     , Control.Effects.Reader
+                     , Control.Effects.Writer
+                     , Control.Effects.State
+                     , Control.Effects.Exception
+                     , Control.Effects.IO
+                     , Control.Effects.Search 
 
   -- other-extensions:    
   build-depends:       base           >=4.7 && <4.8
@@ -93,4 +77,7 @@ benchmark benchm
   build-depends:       base >=4.7 && <4.8, effect-handlers
   build-depends:       criterion
   ghc-options:         -O3
+  default-extensions:  DataKinds
+                     , FlexibleContexts
+                     , NoMonomorphismRestriction
   
