@@ -1,5 +1,5 @@
 name:                effect-handlers
-version:             0.1.0.1
+version:             0.1.0.2
 synopsis:            A library for writing extensible algebraic effects and handlers. Similar to extensible-effects but with deep handlers.
 homepage:            https://github.com/edofic/effect-handlers
 bug-reports:         https://github.com/edofic/effect-handlers/issues
@@ -54,7 +54,7 @@ library
 
   -- other-extensions:    
   build-depends:       base           >=4.7 && <4.8
-                     , free           >=4.9 && <4.11
+                     , free           >=4.9 && <4.12
                      , mtl            >=2.1 && <2.3
                      , kan-extensions >=4.1 && <4.3
   hs-source-dirs:      src
