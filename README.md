@@ -33,12 +33,12 @@ import Control.Effects.Cont.Exception
 
 program = do
   v <- ask
-  if v < 15 
+  if v < 15
   then throw $ show v
   else return (v+1)
 
-run n = runPure 
-                 . handle exceptionHandler 
+run n = runPure
+                 . handle exceptionHandler
                  . handle (readerHandler n)
 
 res :: Integer -> Either String Integer

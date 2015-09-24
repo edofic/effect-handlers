@@ -1,7 +1,10 @@
-{-# LANGUAGE OverlappingInstances #-}
+{-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE PolyKinds #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TypeFamilies #-}
 
 -- |This module provides an open union of functors.
-module Data.Union 
+module Data.Union
 ( Union
 , Member
 , inj
@@ -10,44 +13,64 @@ module Data.Union
 , trivial
 ) where
 
-import Data.Maybe
-import Data.Typeable
 import Unsafe.Coerce (unsafeCoerce)
+
+data Nat = Zero | Succ Nat
+
+data Proxy (n :: Nat) = Proxy
+
+class ReifyNat (n :: Nat) where
+  reifyNat :: Proxy n -> Int -> Int
+
+instance ReifyNat Zero where
+  reifyNat _ acc = acc
+
+instance (ReifyNat n) => ReifyNat (Succ n) where
+  reifyNat _ acc = reifyNat (Proxy :: Proxy n) (acc+1)
+
+type family Index (a :: k) (as :: [k]) :: Nat where
+  Index a (a ': t) = Zero
+  Index a (b ': t) = Succ (Index a t)
+
+type family DropAt (n :: Nat) (as :: [k]) :: [k] where
+  DropAt Zero (a ': as) = as
+  DropAt (Succ n) (a ': as) = a ': DropAt n as
+
 
 -- |`Union` is an open sum of functors
 -- A value of type `Union` r a is a value f a for some f that is a member of the r list
 -- Since direct construction is not safe you have to use `inj` to create a value.
-data Union (r :: [* -> *]) (a :: *) where
-  Union :: (Functor f, Typeable f) => f a -> Union r a
+data Union (fs :: [* -> *]) a where
+  At :: Functor f => Int -> f a -> Union s a
 
-instance Functor (Union r) where
-  fmap f (Union fa) = Union (fmap f fa)
+instance Functor (Union fs) where
+  fmap f (At i fa) = At i (fmap f fa)
 
--- |The `Member` type clas denotes that f is a member of type list r
-class Member (f :: * -> *) (r :: [* -> *]) where
-instance Member h (h ': t)
-instance (Member x t) => Member x (h ': t)
+
+-- |The `Member` type denotes that f is a member of type list r
+type Member a s = ReifyNat (Index a s)
 
 -- |Smart constructor for `Union`. Injects the functor into any union
--- of which the said functor is a member. Please note that only the 
--- type constructor need be a `Typeable`.
-inj :: (Typeable f, Functor f, Member f r) => f a -> Union r a
-inj = Union 
+-- of which the said functor is a member.
+inj :: (Functor f, Member f s) => f a -> Union s a
+inj = go Proxy  where
+  go :: (Functor f, Member f s) => Proxy (Index f s) -> f a -> Union s a
+  go p fa = At (reifyNat p 0) fa
+
 
 -- |Project a `Union` into a specific functor.
-prj :: (Typeable f, Member f r) => Union r a -> Maybe (f a)
-prj (Union d) = res where
-  availableType = typeOf1 d
-  wantedType = typeOf1 $ fromJust res
-  res = if availableType == wantedType
-        then Just $ unsafeCoerce d
-        else Nothing
+prj :: (Member f s) => Union s a -> Maybe (f a)
+prj = go Proxy where
+  go :: (Member f s) => Proxy (Index f s) -> Union s a -> Maybe (f a)
+  go p (At i a) | reifyNat p 0 == i = Just (unsafeCoerce a)
+                | otherwise         = Nothing
 
 -- |Decompose a `Union`. Similar to `prj` but gives you a
 -- `Union` instance without the functor f in type if projection fails.
-decomp :: (Typeable f) => Union (f ': r) a -> Either (f a) (Union r a)
-decomp u@(Union d) = maybe (Right $ Union d) Left $ prj u
+decomp :: Union (f ': s) a -> Either (Union s a) (f a)
+decomp (At 0 a) = Right (unsafeCoerce a)
+decomp (At i a) = Left (At (i-1) a)
 
 -- |A `Union` of one functor can only be that. Safe cast.
-trivial :: (Typeable f) => Union '[f] a -> f a
-trivial = fromJust . prj
+trivial :: Union '[f] a -> f a
+trivial (At _ fa) = unsafeCoerce fa

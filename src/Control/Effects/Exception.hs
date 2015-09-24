@@ -6,11 +6,11 @@ import Control.Effects.Eff
 
 -- |The functor representing the exception. You shouldn't need
 -- to create this manually, just use `throw`.
-newtype Exception m a = Exception m deriving (Functor, Typeable)
+newtype Exception m a = Exception m deriving (Functor)
 
 -- |Throw an exception. The only requirement is that exception
 -- be typeable.
-throw :: (Member (Exception a) r, Typeable a) => a -> Eff r b
+throw :: (Member (Exception a) r) => a -> Eff r b
 throw m = effect $ \k -> inj $ Exception m
 
 -- |This handler converts an program that might throw an exception

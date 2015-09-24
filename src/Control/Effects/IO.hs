@@ -8,7 +8,7 @@ import Control.Effects.Eff
 
 -- |The functor representing the effect. You shouldn't need
 -- to create this manually, just use `liftIO`.
-data LiftIO a = forall r . LiftIO (IO r) (r -> a) deriving (Typeable)
+data LiftIO a = forall r . LiftIO (IO r) (r -> a) 
 
 instance Functor LiftIO where
   fmap f (LiftIO c k) = LiftIO c (f . k)
